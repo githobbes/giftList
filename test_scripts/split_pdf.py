@@ -23,4 +23,3 @@ for i in range(my_doc.getNumPages()):
     new_path = f"{str(pdf_savepath)}\\sample_page_{i}.pdf"
     with Path(new_path).open(mode="wb") as output_file:
         new_doc.write(output_file)
-
