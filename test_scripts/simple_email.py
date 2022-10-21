@@ -48,7 +48,6 @@ def send_mail(send_from, send_to, subject, message, files=[],
     smtp.sendmail(send_from, send_to, msg.as_string())
     smtp.quit()
 
-
 # Parameters for test message
 send_from = 'donotreply@priesters.com'
 send_to = ['mphillips@multivaluecentral.com']
