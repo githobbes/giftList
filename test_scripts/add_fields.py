@@ -5,7 +5,8 @@ from borb.pdf import Document
 from borb.pdf import PDF
 from borb.pdf.canvas.geometry.rectangle import Rectangle
 from borb.pdf import OrderedList
-from borb.pdf import TextField
+from borb.pdf import TextField, Paragraph, TextArea
+from borb.pdf import FlexibleColumnWidthTable, FixedColumnWidthTable, TableCell
 
 from decimal import Decimal
 
@@ -26,21 +27,39 @@ with open(str(pdf_path), "rb") as in_file_handle:
     doc = PDF.loads(in_file_handle)
 page = doc.get_page(0)
 
+
 # Add Rectangle in Main Address box:
 r: Rectangle = Rectangle(
-    Decimal(630),  # x: 0 + page_margin
-    Decimal(620),  # y: page_height - page_margin - height_of_textbox
-    Decimal(243),  # width: page_width - 2 * page_margin
-    Decimal(154),  # height
+    Decimal(635),  # left side
+    Decimal(620),  # bottom
+    Decimal(240),  # width
+    Decimal(150),  # height
 )
 
-# Paint Table!!! containing the BUYER address data
-# Table should have NO BORDER
+# Table with Account Number and Key Code (Top line of Buyer Address Box)
 send_to = (
-    OrderedList()   # We need to change this to be a table...
-    .add(TextField(field_name="send_to_name", value="Michael Phillips"))
-    .add(TextField(field_name="send_to_address", value="3080 Colorado Blvd"))
-    .add(TextField(field_name="send_to_city_state", value="Denver, CO 80207"))
+    FlexibleColumnWidthTable(number_of_columns=4, number_of_rows=1)
+    .add(Paragraph("Acct: ", font_size=Decimal(10)))
+    .add(TextField(field_name="b_acct_number", value="1234567890##", font_size=Decimal(10)))
+    .add(Paragraph("Key Code: ", font_size=Decimal(10)))
+    .add(TextField(field_name="b_key_code", value="12345", font_size=Decimal(10)))
+    .set_padding_on_all_cells(Decimal(2), Decimal(2), Decimal(2), Decimal(2))
+    .no_borders()
+)
+send_to._content[3]._preferred_width = Decimal(10)
+send_to.paint(page, r)
+
+r: Rectangle = Rectangle(
+    Decimal(635),
+    Decimal(620),
+    Decimal(240),
+    Decimal(100),
+)
+
+# Table with Buyer's address details
+send_to = (
+    FixedColumnWidthTable(number_of_columns=1, number_of_rows=1)
+    .add(TextArea(field_name='b_address_box', number_of_lines=4, padding_top=Decimal(2), padding_bottom=Decimal(2)))
 )
 send_to.paint(page, r)
 
