@@ -1,8 +1,21 @@
 from pathlib import Path
 from xml.etree.ElementTree import ElementTree, Element, SubElement
+from borb.pdf import Document, PDF
 
+# Defining constants
 ROOT = Element('root')
 BUYER_TREE = ElementTree(ROOT)
+PATH_TO_TEMPLATES = (Path.home() / "PycharmProjects" / "giftlist" / "data")
+PATH_FRONT_PAGE = (PATH_TO_TEMPLATES / "front_page.pdf")
+PATH_MIDDLE_PAGE = (PATH_TO_TEMPLATES / "middle_page.pdf")
+PATH_BACK_PAGE = (PATH_TO_TEMPLATES / "back_page.pdf")
+# Use borb to open pdf_form_example.pdf
+with open(str(PATH_FRONT_PAGE), "rb") as file:
+    FRONT_PAGE = PDF.loads(file)
+with open(str(PATH_MIDDLE_PAGE), "rb") as file:
+    MIDDLE_PAGE = PDF.loads(file)
+with open(str(PATH_BACK_PAGE), "rb") as file:
+    BACK_PAGE = PDF.loads(file)
 
 
 def main_loop(input_file: str):
@@ -52,6 +65,43 @@ def main_loop(input_file: str):
 
 def make_giftlist():
     print('*** making the giftlist ***')
+    global FRONT_PAGE, MIDDLE_PAGE, BACK_PAGE
+    global ROOT
+
+    # Print BUYER details on FRONT_PAGE
+    page = FRONT_PAGE.get_page(0)
+    buyer = ROOT.find('buyer')
+    page.set_form_field_value('b_acct_number', buyer.get('acct_no'))
+    page.set_form_field_value('b_key_code', buyer.get('key_code'))
+    page.set_form_field_value('b_name', buyer.get('name'))
+    buyer_address = [buyer.get('company_name'),
+                     buyer.get('address_line_1'),
+                     buyer.get('address_line_2'),
+                     f'{buyer.get("city")}, {buyer.get("state")} {buyer.get("zip")}']
+    buyer_address = [x for x in buyer_address if x]
+    if len(buyer_address) == 4:  # Company Name is option and only displayed if there is available space
+        buyer_address.pop(0)
+    for i in range(buyer_address):
+        page.set_form_field_value('b_address_'+str(i+1), buyer_address[i])
+
+    # Print RECIPIENT details to FRONT_PAGE
+    recip_list = ROOT.findall('recip')
+    num_recip = len(recip_list)
+    for _ in range(min(5, num_recip)):
+        print('Printing recipient data on FRONT_PAGE')
+
+    # FRONT_PAGE is complete! Let's save it.
+    print('Saving front page...')
+    doc = Document().add_page(page)
+    doc_path = (PATH_TO_TEMPLATES / ('front_page_'+buyer.get('acct_no')+'.pdf'))
+    with open("output.pdf", "wb") as pdf_file_handle:
+        PDF.dumps(pdf_file_handle, doc)
+
+
+    # Print RECIPIENT details to BACK_PAGE
+
+
+
 
 
 def email_giftlist():
@@ -104,7 +154,7 @@ def new_recipient(recipient_line: str):
     }
 
     # Add recipient node to ROOT
-    SubElement(ROOT, 'recip_'+recip_dict['acct_no'], attrib=recip_dict)
+    SubElement(ROOT, 'recip', attrib=recip_dict)
 
 
 if __name__ == '__main__':
