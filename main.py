@@ -94,14 +94,24 @@ def make_giftlist():
     print('Saving front page...')
     doc = Document().add_page(page)
     doc_path = (PATH_TO_TEMPLATES / ('front_page_'+buyer.get('acct_no')+'.pdf'))
-    with open("output.pdf", "wb") as pdf_file_handle:
+    with open(str(doc_path), "wb") as pdf_file_handle:
         PDF.dumps(pdf_file_handle, doc)
 
-
     # Print RECIPIENT details to BACK_PAGE
+    page = BACK_PAGE.get_page(0)
+    for _ in range(min(5 + 6, num_recip)):
+        print('Printing recipient data on BACK_PAGE')
 
+    # BACK_PAGE is complete! Let's save it.
+    print('Saving back page...')
+    doc = Document().add_page(page)
+    doc_path = (PATH_TO_TEMPLATES / ('back_page_'+buyer.get('acct_no')+'.pdf'))
+    with open(str(doc_path), "wb") as pdf_file_handle:
+        PDF.dumps(pdf_file_handle, doc)
 
-
+    ### What I've done so far isn't bad, but it's not great
+    ### I should be developing the pages and adding them to the document, NOT saving each page as its own document
+    print("The Gift List Order Form for this buyer is complete!")
 
 
 def email_giftlist():
