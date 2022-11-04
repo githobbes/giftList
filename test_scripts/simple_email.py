@@ -8,11 +8,12 @@ from email import encoders
 
 
 def send_mail(send_from, send_to, subject, message, files=[],
-              server="secure.emailsrvr.com", port=587, username='donotreply@priesters.com', password='PPInc1935!@#',
+              server="smtp.mandrillapp.com", port=587,
+              username="Priester's Pecans, Inc.",
+              password='4y7mMZRiRMFbor-F_L1ucA',
               use_tls=True):
     """Compose and send email with provided info and attachments.
-
-    Args:
+        Args:
         send_from (str): from name
         send_to (list[str]): to name(s)
         subject (str): message title
@@ -56,4 +57,4 @@ message = 'This is just a test.'
 files = [r'C:\Users\jnun.P2\PycharmProjects\giftList\test_scripts\dummy.pdf']
 
 # Running the test! CROSS YOUR BLOODY FINGERS, BRO!
-send_mail(send_from, send_to, subject, message, files, use_tls=True)
+send_mail(send_from, send_to, subject, message, files, use_tls=True, password='asdf')
