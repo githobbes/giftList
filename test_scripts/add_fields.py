@@ -44,15 +44,15 @@ paint_to(TextField(field_name="b_address_3", font_size=Decimal(8)), page, 0.275,
 paint_to(TextField(field_name="b_address_4", font_size=Decimal(8)), page, 0.275, 8.75, 3.4183, 0.25)
 
 for i in range(5):
-    rec = f"r{i + 1}_"
-    paint_to(TextField(field_name=f"{rec}name", font_size=Decimal(8)), page, 0.275, 7.5 - i * 1.485, 2.1, 0.19)
-    paint_to(TextField(field_name=f"{rec}address_1", font_size=Decimal(8)), page, 0.275, 7.31 - i * 1.485, 2.1, 0.19)
-    paint_to(TextField(field_name=f"{rec}address_2", font_size=Decimal(8)), page, 0.275, 7.12 - i * 1.485, 2.1, 0.19)
-    paint_to(TextField(field_name=f"{rec}acct_num", font_size=Decimal(8)), page, 2.65, 7.5 - i * 1.485, 1.05, 0.19)
-    paint_to(TextField(field_name=f"{rec}item_desc", font_size=Decimal(8)), page, 0.275, 6.7985 - i * 1.485, 2.1, 0.19)
-    paint_to(TextField(field_name=f"{rec}greeting_1", font_size=Decimal(8)), page, 0.275, 6.6085 - i * 1.485, 2.1, 0.19)
-    paint_to(TextField(field_name=f"{rec}greeting_2", font_size=Decimal(8)), page, 0.275, 6.4185 - i * 1.485, 2.1, 0.19)
-    paint_to(TextField(field_name=f"{rec}greeting_3", font_size=Decimal(8)), page, 0.275, 6.2285 - i * 1.485, 2.1, 0.19)
+    r = f"r{i + 1}_"
+    paint_to(TextField(field_name=f"{r}name", font_size=Decimal(8)), page, 0.275, 7.5 - i * 1.485, 2.1, 0.19)
+    paint_to(TextField(field_name=f"{r}address_1", font_size=Decimal(8)), page, 0.275, 7.31 - i * 1.485, 2.1, 0.19)
+    paint_to(TextField(field_name=f"{r}address_2", font_size=Decimal(8)), page, 0.275, 7.12 - i * 1.485, 2.1, 0.19)
+    paint_to(TextField(field_name=f"{r}acct_num", font_size=Decimal(8)), page, 2.65, 7.5 - i * 1.485, 1.05, 0.19)
+    paint_to(TextField(field_name=f"{r}item_desc", font_size=Decimal(8)), page, 0.275, 6.7985 - i * 1.485, 3.42, 0.19)
+    paint_to(TextField(field_name=f"{r}greeting_1", font_size=Decimal(8)), page, 0.275, 6.6085 - i * 1.485, 3.42, 0.19)
+    paint_to(TextField(field_name=f"{r}greeting_2", font_size=Decimal(8)), page, 0.275, 6.4185 - i * 1.485, 3.42, 0.19)
+    paint_to(TextField(field_name=f"{r}greeting_3", font_size=Decimal(8)), page, 0.275, 6.2285 - i * 1.485, 3.42, 0.19)
 
 
 output_path = (
@@ -65,4 +65,30 @@ output_path = (
 with open(str(output_path), "wb") as pdf_file_handle:
     PDF.dumps(pdf_file_handle, doc)
 
+# Note: Used Adobe Acrobat's Prepare Form tool to modify size of key_code box and MaxLen for relevant TextFields
 
+# Path to blank front page
+pdf_path = (
+    Path.home()
+    / "PycharmProjects"
+    / "giftlist"
+    / "data"
+    / "middle_no_acroforms.pdf"
+)
+
+# Use borb to open pdf_form_example.pdf
+doc: typing.Optional[Document] = None
+with open(str(pdf_path), "rb") as in_file_handle:
+    doc = PDF.loads(in_file_handle)
+page = doc.get_page(0)
+
+for i in range(6):
+    r = f"r{i + 1}_"
+    paint_to(TextField(field_name=f"{r}name", font_size=Decimal(8)), page, 0.275, 7.5 - i * 1.485, 2.1, 0.19)
+    paint_to(TextField(field_name=f"{r}address_1", font_size=Decimal(8)), page, 0.275, 7.31 - i * 1.485, 2.1, 0.19)
+    paint_to(TextField(field_name=f"{r}address_2", font_size=Decimal(8)), page, 0.275, 7.12 - i * 1.485, 2.1, 0.19)
+    paint_to(TextField(field_name=f"{r}acct_num", font_size=Decimal(8)), page, 2.65, 7.5 - i * 1.485, 1.05, 0.19)
+    paint_to(TextField(field_name=f"{r}item_desc", font_size=Decimal(8)), page, 0.275, 6.7985 - i * 1.485, 3.42, 0.19)
+    paint_to(TextField(field_name=f"{r}greeting_1", font_size=Decimal(8)), page, 0.275, 6.6085 - i * 1.485, 3.42, 0.19)
+    paint_to(TextField(field_name=f"{r}greeting_2", font_size=Decimal(8)), page, 0.275, 6.4185 - i * 1.485, 3.42, 0.19)
+    paint_to(TextField(field_name=f"{r}greeting_3", font_size=Decimal(8)), page, 0.275, 6.2285 - i * 1.485, 3.42, 0.19)
