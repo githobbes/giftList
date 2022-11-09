@@ -2,6 +2,7 @@ import typing
 from pathlib import Path
 
 from borb.pdf import Document, PDF
+from borb.io.read.types import Dictionary, List, Name, Stream, String
 
 pdf_path = (
     Path.home()
@@ -68,7 +69,8 @@ def has_form_field(self, field_name: str) -> bool:
             != 0
     )
 
-Step 1: call page.get("Annots", []) to acquire list of "Annots"
+
+# Step 1: call page.get("Annots", []) to acquire list of "Annots"
 form_fields = [ x for x in page.get("Annots", []) if x
                 and "Type" in x
                 and x["Type"] == "Annot"

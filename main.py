@@ -6,7 +6,7 @@ from borb.pdf import Document, PDF
 ROOT = Element('root')
 BUYER_TREE = ElementTree(ROOT)
 PATH_TO_TEMPLATES = (Path.home() / "PycharmProjects" / "giftlist" / "data")
-PATH_FRONT_PAGE = (PATH_TO_TEMPLATES / "front_page.pdf")
+PATH_FRONT_PAGE = (PATH_TO_TEMPLATES / "buyer_page.pdf")
 PATH_MIDDLE_PAGE = (PATH_TO_TEMPLATES / "middle_page.pdf")
 PATH_BACK_PAGE = (PATH_TO_TEMPLATES / "back_page.pdf")
 # Use borb to open pdf_form_example.pdf
