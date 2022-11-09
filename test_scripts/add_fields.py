@@ -3,6 +3,8 @@ from pathlib import Path
 
 from borb.pdf import Document, PDF, TextField, Page
 from borb.pdf.canvas.geometry.rectangle import Rectangle
+from borb.io.read.types import Dictionary, List, Name, Stream, String
+
 from decimal import Decimal
 
 
@@ -52,12 +54,13 @@ for i in range(5):
     paint_to(TextField(field_name=f"{recip}greeting_2"), page, 0.275, 6.4185 - i * 1.485, 2.1, 0.19)
     paint_to(TextField(field_name=f"{recip}greeting_3"), page, 0.275, 6.2285 - i * 1.485, 2.1, 0.19)
 
+
 output_path = (
     Path.home()
     / "PycharmProjects"
     / "giftlist"
     / "data"
-    / "buyer_page.pdf"
+    / "output.pdf"
 )
 with open(str(output_path), "wb") as pdf_file_handle:
     PDF.dumps(pdf_file_handle, doc)
