@@ -84,11 +84,22 @@ page = doc.get_page(0)
 
 for i in range(6):
     r = f"r{i + 1}_"
-    paint_to(TextField(field_name=f"{r}name", font_size=Decimal(8)), page, 0.275, 7.5 - i * 1.485, 2.1)
-    paint_to(TextField(field_name=f"{r}address_1", font_size=Decimal(8)), page, 0.275, 7.31 - i * 1.485, 2.1)
-    paint_to(TextField(field_name=f"{r}address_2", font_size=Decimal(8)), page, 0.275, 7.12 - i * 1.485, 2.1)
-    paint_to(TextField(field_name=f"{r}acct_num", font_size=Decimal(8)), page, 2.65, 7.5 - i * 1.485, 1.05)
-    paint_to(TextField(field_name=f"{r}item_desc", font_size=Decimal(8)), page, 0.275, 6.7985 - i * 1.485, 3.42)
-    paint_to(TextField(field_name=f"{r}greeting_1", font_size=Decimal(8)), page, 0.275, 6.6085 - i * 1.485, 3.42)
-    paint_to(TextField(field_name=f"{r}greeting_2", font_size=Decimal(8)), page, 0.275, 6.4185 - i * 1.485, 3.42)
-    paint_to(TextField(field_name=f"{r}greeting_3", font_size=Decimal(8)), page, 0.275, 6.2285 - i * 1.485, 3.42)
+    paint_to(TextField(field_name=f"{r}name", font_size=Decimal(8)), page, 0.275, 9.77 - i * 1.607, 2.1)
+    paint_to(TextField(field_name=f"{r}address_1", font_size=Decimal(8)), page, 0.275, 9.6367 - i * 1.607, 2.1)
+    paint_to(TextField(field_name=f"{r}address_2", font_size=Decimal(8)), page, 0.275, 9.5034 - i * 1.607, 2.1)
+    paint_to(TextField(field_name=f"{r}acct_num", font_size=Decimal(8)), page, 2.65, 9.77 - i * 1.607, 1.05)
+    paint_to(TextField(field_name=f"{r}item_desc", font_size=Decimal(8)), page, 0.275, 8.97 - i * 1.607, 3.42)
+    paint_to(TextField(field_name=f"{r}greeting_1", font_size=Decimal(8)), page, 0.275, 8.8367 - i * 1.607, 3.42)
+    paint_to(TextField(field_name=f"{r}greeting_2", font_size=Decimal(8)), page, 0.275, 8.7034 - i * 1.607, 3.42)
+    paint_to(TextField(field_name=f"{r}greeting_3", font_size=Decimal(8)), page, 0.275, 8.5701 - i * 1.607, 3.42)
+
+output_path = (
+    Path.home()
+    / "PycharmProjects"
+    / "giftlist"
+    / "data"
+    / "output_1.pdf"
+)
+with open(str(output_path), "wb") as pdf_file_handle:
+    PDF.dumps(pdf_file_handle, doc)
+
