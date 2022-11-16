@@ -66,23 +66,22 @@ def main_loop(input_file: str):
                 print('--- calling new_buyer(buyer_line)')
                 new_buyer(buyer_line=line)
 
-            else:  # We have a new recipient
-                print('New Recipient')
-                print('--- calling new_recipient(recipient_line)')
-                new_recipient(recipient_line=line)
+            else:  # This line is NOT a Buyer
+                if len(line) > 0 and line[0] in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']:  # Recipient Data
+                    print('New Recipient')
+                    print('--- calling new_recipient(recipient_line)')
+                    new_recipient(recipient_line=line)
+                elif len(ROOT) > 0:  # Not a Buyer, Not a Recipient, but we have data: must be EOF!
+                    print('Processing new gift list')
+                    print('--- calling make_giftlist()')
+                    make_giftlist()
 
-        # Finished process new data - need to process last Gift List
-        if len(ROOT) > 0:
-            print('Processing new gift list')
-            print('--- calling make_giftlist()')
-            make_giftlist()
+                    print('--- calling e-mail_giftlist()')
+                    email_giftlist()
 
-            print('--- calling e-mail_giftlist()')
-            email_giftlist()
-
-            print('Pruning XML Tree')
-            print('--- calling prune_xml()')
-            prune_xml()
+                    print('Pruning XML Tree')
+                    print('--- calling prune_xml()')
+                    prune_xml()
 
 
 def make_giftlist():
@@ -126,6 +125,7 @@ def make_giftlist():
         # Printing recipient data to next box
         try:
             recip = recip_list.pop()
+            al2 = f"{recip.get('city')}, {recip.get('state')} {recip.get('zip')}"
         except IndexError:
             recip_dict = {
                 'acct_num': '',
@@ -142,13 +142,13 @@ def make_giftlist():
                 'company_name': ''
             }
             recip = Element('null', attrib=recip_dict)
+            al2 = ''
         paint_to(TextField(field_name=f"pb_r{i+1}name", value=recip.get('name'), font_size=Decimal(8),
                            border_top=False, border_right=False, border_bottom=False, border_left=False),
                  page, 0.275, 7.55 - i * 1.485, 2.1)
         paint_to(TextField(field_name=f"pb_r{i+1}address_1", value=recip.get('address_1'), font_size=Decimal(8),
                            border_top=False, border_right=False, border_bottom=False, border_left=False),
                  page, 0.275, 7.4167 - i * 1.485, 2.1)
-        al2 = f"{recip.get('city')}, {recip.get('state')} {recip.get('zip')}"
         paint_to(TextField(field_name=f"pb_r{i+1}address_2", value=al2, font_size=Decimal(8),
                            border_top=False, border_right=False, border_bottom=False, border_left=False),
                  page, 0.275, 7.2834 - i * 1.485, 2.1)
@@ -183,6 +183,7 @@ def make_giftlist():
             # Printing recipient data to next box
             try:
                 recip = recip_list.pop()
+                al2 = f"{recip.get('city')}, {recip.get('state')} {recip.get('zip')}"  # Setting Address Line 2
             except IndexError:
                 recip_dict = {
                     'acct_num': '',
@@ -199,7 +200,7 @@ def make_giftlist():
                     'company_name': ''
                 }
                 recip = Element('null', attrib=recip_dict)
-
+                al2 = ''
             paint_to(
                 TextField(field_name=f"p{p}_r{i+1}name", value=recip.get('name'), font_size=Decimal(8),
                           border_top=False, border_right=False, border_bottom=False, border_left=False),
@@ -208,7 +209,6 @@ def make_giftlist():
                 TextField(field_name=f"p{p}_r{i+1}address_1", value=recip.get('address_1'), font_size=Decimal(8),
                           border_top=False, border_right=False, border_bottom=False, border_left=False),
                 page, 0.275, 9.6367 - i * 1.607, 2.1)
-            al2 = f"{recip.get('city')}, {recip.get('state')} {recip.get('zip')}"
             paint_to(
                 TextField(field_name=f"p{p}_r{i+1}address_2", value=al2, font_size=Decimal(8),
                           border_top=False, border_right=False, border_bottom=False, border_left=False),
