@@ -7,6 +7,7 @@ doc = Document()
 page = Page()
 doc.add_page(page)
 second_page = Page()
+doc.add_page(second_page)
 
 rect = Rectangle(Decimal(72), Decimal(10*72), Decimal(72), Decimal(72))
 
@@ -23,4 +24,4 @@ new_page = new_doc.get_page(0)
 new_page.set_form_field_value('name', 'value')
 
 with open("textfield_test.pdf", "wb") as pdf_file_handle:
-    PDF.dumps(pdf_file_handle, doc)
+    PDF.dumps(pdf_file_handle, new_doc)
