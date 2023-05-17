@@ -18,13 +18,6 @@ PATH_TO_TEMPLATES = (Path.home() / "PycharmProjects" / "giftlist" / "data")
 PATH_BUYER_PAGE = (PATH_TO_TEMPLATES / "buyer_page.pdf")
 PATH_RECIPIENT_PAGE = (PATH_TO_TEMPLATES / "recipient_page.pdf")
 PATH_BACK_PAGE = (PATH_TO_TEMPLATES / "details_page.pdf")
-# Use borb to open pdf_form_example.pdf
-with open(str(PATH_BUYER_PAGE), "rb") as file:
-    BUYER_PAGE = PDF.loads(file).get_page(0)
-with open(str(PATH_RECIPIENT_PAGE), "rb") as file:
-    RECIPIENT_PAGE = PDF.loads(file).get_page(0)
-with open(str(PATH_BACK_PAGE), "rb") as file:
-    BACK_PAGE = PDF.loads(file).get_page(0)
 
 
 def main_loop(input_file: str):
@@ -87,21 +80,25 @@ def main_loop(input_file: str):
 def make_giftlist():
     print('*** making the giftlist ***')
     global PATH_TO_TEMPLATES
-    global BUYER_PAGE, RECIPIENT_PAGE, BACK_PAGE
     global ROOT
     giftlist = Document()
 
     # Print BUYER details on FRONT_PAGE
-    page = BUYER_PAGE.__deepcopy__()
-    giftlist.add_page(page)
+    with open(str(PATH_BUYER_PAGE), "rb") as file:
+        giftlist.add_page(PDF.loads(file).get_page(0))
+    page = giftlist.get_page(0)
+
     buyer = ROOT.find('buyer')
     paint_to(TextField(field_name="b_acct_num", value=buyer.get('acct_num'), font_size=Decimal(8),
+                       default_value=buyer.get('acct_num'),
                        border_top=False, border_right=False, border_bottom=False, border_left=False),
-             page, 0.6647, 10.5129, 1.5)
+             page, 0.7, 10.5, 1.5)
     paint_to(TextField(field_name="b_key_code", value=buyer.get('key_code'), font_size=Decimal(8),
+                       default_value=buyer.get('key_code'),
                        border_top=False, border_right=False, border_bottom=False, border_left=False),
-             page, 2.9798, 10.5129, 0.6976)
+             page, 2.9798, 10.5, 0.3)
     paint_to(TextField(field_name="b_name", value=buyer.get('name'), font_size=Decimal(8),
+                       default_value=buyer.get('name'),
                        border_top=False, border_right=False, border_bottom=False, border_left=False),
              page, 0.275, 9.4222, 3.4183)
     buyer_address = [buyer.get('company_name'),
@@ -113,6 +110,7 @@ def make_giftlist():
         buyer_address.append('')
     for i in range(len(buyer_address)):
         paint_to(TextField(field_name=f"b_address_{i + 1}", value=buyer_address[i], font_size=Decimal(8),
+                           default_value=buyer_address[i],
                            border_top=False, border_right=False, border_bottom=False, border_left=False),
                  page, 0.275, 9.2889 - i*0.1333, 3.4183)
 
@@ -143,28 +141,36 @@ def make_giftlist():
             }
             recip = Element('null', attrib=recip_dict)
             al2 = ''
-        paint_to(TextField(field_name=f"pb_r{i+1}name", value=recip.get('name'), font_size=Decimal(8),
+        paint_to(TextField(field_name=f"pb_r{i+1}_name", value=recip.get('name'), font_size=Decimal(8),
+                           default_value=recip.get('name'),
                            border_top=False, border_right=False, border_bottom=False, border_left=False),
                  page, 0.275, 7.55 - i * 1.485, 2.1)
-        paint_to(TextField(field_name=f"pb_r{i+1}address_1", value=recip.get('address_1'), font_size=Decimal(8),
+        paint_to(TextField(field_name=f"pb_r{i+1}_address_1", value=recip.get('address_1'), font_size=Decimal(8),
+                           default_value=recip.get('address_1'),
                            border_top=False, border_right=False, border_bottom=False, border_left=False),
                  page, 0.275, 7.4167 - i * 1.485, 2.1)
-        paint_to(TextField(field_name=f"pb_r{i+1}address_2", value=al2, font_size=Decimal(8),
+        paint_to(TextField(field_name=f"pb_r{i+1}_address_2", value=al2, font_size=Decimal(8),
+                           default_value=al2,
                            border_top=False, border_right=False, border_bottom=False, border_left=False),
                  page, 0.275, 7.2834 - i * 1.485, 2.1)
-        paint_to(TextField(field_name=f"pb_r{i+1}acct_num", value=recip.get('acct_num'), font_size=Decimal(8),
+        paint_to(TextField(field_name=f"pb_r{i+1}_acct_num", value=recip.get('acct_num'), font_size=Decimal(8),
+                           default_value=recip.get('acct_num'),
                            border_top=False, border_right=False, border_bottom=False, border_left=False),
                  page, 2.65, 7.55 - i * 1.485, 1.05)
-        paint_to(TextField(field_name=f"pb_r{i+1}item_desc", value=recip.get('item_desc_page'), font_size=Decimal(8),
+        paint_to(TextField(field_name=f"pb_r{i+1}_item_desc", value=recip.get('item_desc_page'), font_size=Decimal(8),
+                           default_value=recip.get('item_desc_page'),
                            border_top=False, border_right=False, border_bottom=False, border_left=False),
                  page, 0.275, 6.75 - i * 1.485, 3.42)
-        paint_to(TextField(field_name=f"pb_r{i+1}greeting_1", value=recip.get('greeting_1'), font_size=Decimal(8),
+        paint_to(TextField(field_name=f"pb_r{i+1}_greeting_1", value=recip.get('greeting_1'), font_size=Decimal(8),
+                           default_value=recip.get('greeting_1'),
                            border_top=False, border_right=False, border_bottom=False, border_left=False),
                  page, 0.275, 6.6167 - i * 1.485, 3.42)
-        paint_to(TextField(field_name=f"pb_r{i+1}greeting_2", value=recip.get('greeting_2'), font_size=Decimal(8),
+        paint_to(TextField(field_name=f"pb_r{i+1}_greeting_2", value=recip.get('greeting_2'), font_size=Decimal(8),
+                           default_value=recip.get('greeting_2'),
                            border_top=False, border_right=False, border_bottom=False, border_left=False),
                  page, 0.275, 6.4834 - i * 1.485, 3.42)
-        paint_to(TextField(field_name=f"pb_r{i+1}greeting_3", value=recip.get('greeting_3'), font_size=Decimal(8),
+        paint_to(TextField(field_name=f"pb_r{i+1}_greeting_3", value=recip.get('greeting_3'), font_size=Decimal(8),
+                           default_value=recip.get('greeting_3'),
                            border_top=False, border_right=False, border_bottom=False, border_left=False),
                  page, 0.275, 6.3501 - i * 1.485, 3.42)
 
@@ -174,8 +180,9 @@ def make_giftlist():
     num_pages = math.ceil((num_recip - 5) / 6)
     for p in range(num_pages):
         print('Acquiring new copy of RECIPIENT_PAGE')
-        page = RECIPIENT_PAGE.__deepcopy__()
-        giftlist.add_page(page)
+        with open(str(PATH_RECIPIENT_PAGE), "rb") as file:
+            giftlist.add_page(PDF.loads(file).get_page(0))
+        page = giftlist.get_page(p+1)
 
         for i in range(6):
             print('Printing recipient data on page')
@@ -202,40 +209,49 @@ def make_giftlist():
                 recip = Element('null', attrib=recip_dict)
                 al2 = ''
             paint_to(
-                TextField(field_name=f"p{p}_r{i+1}name", value=recip.get('name'), font_size=Decimal(8),
+                TextField(field_name=f"p{p}_r{i+1}_name", value=recip.get('name'), font_size=Decimal(8),
+                          default_value=recip.get('name'),
                           border_top=False, border_right=False, border_bottom=False, border_left=False),
                 page, 0.275, 9.77 - i * 1.607, 2.1)
             paint_to(
-                TextField(field_name=f"p{p}_r{i+1}address_1", value=recip.get('address_1'), font_size=Decimal(8),
+                TextField(field_name=f"p{p}_r{i+1}_address_1", value=recip.get('address_1'), font_size=Decimal(8),
+                          default_value=recip.get('address_1'),
                           border_top=False, border_right=False, border_bottom=False, border_left=False),
                 page, 0.275, 9.6367 - i * 1.607, 2.1)
             paint_to(
-                TextField(field_name=f"p{p}_r{i+1}address_2", value=al2, font_size=Decimal(8),
+                TextField(field_name=f"p{p}_r{i+1}_address_2", value=al2, font_size=Decimal(8),
+                          default_value=al2,
                           border_top=False, border_right=False, border_bottom=False, border_left=False),
                 page, 0.275, 9.5034 - i * 1.607, 2.1)
             paint_to(
-                TextField(field_name=f"p{p}_r{i+1}acct_num", value=recip.get('acct_num'), font_size=Decimal(8),
+                TextField(field_name=f"p{p}_r{i+1}_acct_num", value=recip.get('acct_num'), font_size=Decimal(8),
+                          default_value=recip.get('acct_num'),
                           border_top=False, border_right=False, border_bottom=False, border_left=False),
                 page, 2.65, 9.77 - i * 1.607, 1.05)
             paint_to(
-                TextField(field_name=f"p{p}_r{i+1}item_desc", value=recip.get('item_desc_page'), font_size=Decimal(8),
+                TextField(field_name=f"p{p}_r{i+1}_item_desc", value=recip.get('item_desc_page'), font_size=Decimal(8),
+                          default_value=recip.get('item_desc_page'),
                           border_top=False, border_right=False, border_bottom=False, border_left=False),
                 page, 0.275, 8.97 - i * 1.607, 3.42)
             paint_to(
-                TextField(field_name=f"p{p}_r{i+1}greeting_1", value=recip.get('greeting_1'), font_size=Decimal(8),
+                TextField(field_name=f"p{p}_r{i+1}_greeting_1", value=recip.get('greeting_1'), font_size=Decimal(8),
+                          default_value=recip.get('greeting_1'),
                           border_top=False, border_right=False, border_bottom=False, border_left=False),
                 page, 0.275, 8.8367 - i * 1.607, 3.42)
             paint_to(
-                TextField(field_name=f"p{p}_r{i+1}greeting_2", value=recip.get('greeting_2'), font_size=Decimal(8),
+                TextField(field_name=f"p{p}_r{i+1}_greeting_2", value=recip.get('greeting_2'), font_size=Decimal(8),
+                          default_value=recip.get('greeting_2'),
                           border_top=False, border_right=False, border_bottom=False, border_left=False),
                 page, 0.275, 8.7034 - i * 1.607, 3.42)
             paint_to(
-                TextField(field_name=f"p{p}_r{i+1}greeting_3", value=recip.get('greeting_3'), font_size=Decimal(8),
+                TextField(field_name=f"p{p}_r{i+1}_greeting_3", value=recip.get('greeting_3'), font_size=Decimal(8),
+                          default_value=recip.get('greeting_3'),
                           border_top=False, border_right=False, border_bottom=False, border_left=False),
                 page, 0.275, 8.5701 - i * 1.607, 3.42)
 
     print("Adding copy of BACK_PAGE to Gift List doc")
-    giftlist.add_page(BACK_PAGE.__deepcopy__())
+    with open(str(PATH_BACK_PAGE), "rb") as file:
+        giftlist.add_page(PDF.loads(file).get_page(0))
 
     print("Saving Gift List to new PDF file")
     output_file_name = f"GiftList_for_Acct_{buyer.get('acct_num')}.pdf"
@@ -254,10 +270,10 @@ def email_giftlist():
     buyer = ROOT.find('buyer')
 
     # Getting body of e-mail message
-    is_corporate = buyer.get('is_corporate')
-    letter_path = (PATH_TO_TEMPLATES / ('letter_corporate.txt' if is_corporate else 'letter_noncorporate.txt'))
-    with open(str(letter_path), 'r') as letter_file:
-        letter_body = letter_file.read()
+    if buyer.get('is_corporate'):
+        template_name = "Gift List Corporate 2022"
+    else:
+        template_name = "Gift List Non-Corporate 2022"
 
     # Getting attachment details
     attachment_name = f"GiftList_for_Acct_{buyer.get('acct_num')}.pdf"
@@ -270,7 +286,6 @@ def email_giftlist():
         "from_email": "giftlist@priesters.com",
         "from_name": "Priester's Pecans",
         "subject": "Gift List Order Form",
-        "text": f"{buyer.get('salutation')}{chr(10)}{chr(10)}{letter_body}",
         "to": [
             {
                 "email": buyer.get('email'),
@@ -293,7 +308,9 @@ def email_giftlist():
 
     try:
         mailchimp = MailchimpTransactional.Client(MAILCHIMP_API_KEY)
-        response = mailchimp.messages.send({"message": message})
+        response = mailchimp.messages.send_template({"template_name": template_name,
+                                                     "template_content": [{}],
+                                                     "message": message})
         print('API called successfully: {}'.format(response))
     except ApiClientError as error:
         print('An exception occurred: {}'.format(error.text))
